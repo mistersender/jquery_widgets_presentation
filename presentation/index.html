@@ -28,6 +28,7 @@
 <div class="reveal">
 <div class="slides">
 
+<!-- Section 0: the obligatory stuff -->
 <section>
  <h1>Writing jQuery Widgets</h1>
  <h3>with Jessica Kennedy</h3>
@@ -38,31 +39,43 @@
  [insert sock drawer picture here]
 </section>
 
+<!-- Section 1: what is a widget -->
 <section>
- <h3>What is a Widget?</h3>
- <ul>
-  <li class="fragment">A Stateful Plugin</li>
-  <li class="fragment">Framework for writing stateful javascript</li>
- </ul>
- <!-- <img class="fragment" src="lib/images/confused_mal.gif"> -->
- <aside class="notes" data-markdown>
-  At it's simplest... [a stateful plugin]
+ <section>
+  <h2>What is a Widget?</h2>
+  <ul>
+   <li class="fragment">A Stateful Plugin</li>
+   <li class="fragment">Framework for writing stateful javascript</li>
+  </ul>
+  <!-- <img class="fragment" src="lib/images/confused_mal.gif"> -->
+  <aside class="notes" data-markdown>
+   At it's simplest... [a stateful plugin]
 
-  The most common question I get is _"What's the difference between a plugin and a widget?"_
-  It's a plugin, with _MORE!_
+   The most common question I get is _"What's the difference between a plugin and a widget?"_
+   It's a plugin, with _MORE!_
 
-  Widget factory is a framework for writing stateful plugins.
-  Tries to solve the various ways statfulness can be managed.
- </aside>
+   Widget factory is a framework for writing stateful plugins.
+   Tries to solve the various ways statfulness can be managed.
+  </aside>
+ </section>
+
+ <section>
+  <h3>jQuery UI Widget Factory</h3>
+  <!-- @todo {!} make a sunburst for this -->
+  <p>Fun Fact! jQuery Mobile is built on the Widget Factory</p>
+  <h3 class="fragment">Framework Defines:</h3>
+  <ul>
+   <li class="fragment">Required Functions</li>
+   <li class="fragment">How Callbacks are handled</li>
+   <li class="fragment">How options are handled</li>
+   <li class="fragment">Naming conventions</li>
+  </ul>
+  <aside class="notes" data-markdown>
+   obviously a prototype of functions
+  </aside>
+ </section>
 </section>
 
-<section>
- <h3>Fun Facts about Widgets!</h3>
- <ul>
-  <li class="fragment">Runs jQuery UI Widget Factory</li>
-  <li class="fragment">jQuery Mobile is built on the Widget Factory</li>
- </ul>
-</section>
 <section>
  <h3>Widgets Require:</h3>
  <ul>
