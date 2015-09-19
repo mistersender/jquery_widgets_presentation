@@ -98,6 +98,62 @@
  <!-- @todo {!} add pun husky img -->
 </section>
 
+<!-- section 2, the actual framework -->
+<section>
+ <h1>Widget Factory Framework</h1>
+ <p>Where we make a Harry-Potter themed widget.</p>
+ <aside class="notes" data-markdown>
+  should
+  * cast spells
+ </aside>
+</section>
+
+<section>
+ <h3>Boilerplate</h3>
+ <p>Use a blank boilerplate widget to get started.</p>
+ <a href="../01_boilerplate/" target="_blank">Check it out!</a>
+ <aside class="notes" data-markdown>
+  ```
+  $("[data-boilerplate]").boilerplate();
+  ```
+ </aside>
+</section>
+
+<section>
+ <h3>Namespacing</h3>
+
+ <p>Widgets must contain a namespace as well as their name.</p>
+ <pre><code>
+  // where {} is the widget prototype
+  $.widget("namespace.boilerplate", {});
+ </code></pre>
+
+ <p>Namespace is used to add data to the element for maintaining state.</p>
+ <!-- @todo {!} add image of data-whatever-whatever instead of this lame code block -->
+ <pre><code>
+  data{
+   namespace-boilerplate = {}
+  }
+ </code></pre>
+
+ <p>Externally, the namespace is abstracted.</p>
+ <pre><code>
+  // instantiate boilerplate widget (see, no namespace!)
+  $("#boilerplate").boilerplate();
+ </code></pre>
+
+ <aside class="notes" data-markdown>
+  can only be 1 level deep.
+
+  dash delimited for use in dataset
+
+  see the data from the last example
+  ```
+  $("[data-boilerplate]").data();
+  ```
+ </aside>
+</section>
+
 </div><!-- end slides div -->
 </div><!-- end reveal div -->
 
