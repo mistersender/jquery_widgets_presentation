@@ -1,0 +1,65 @@
+<!doctype html>
+<html lang="en">
+<head>
+ <title>Spells Widget</title>
+ <meta charset="utf-8">
+ <meta http-equiv="cleartype" content="on">
+ <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+ <meta name="description" content="Spells Widget">
+ <meta name="HandheldFriendly" content="True">
+ <meta name="MobileOptimized" content="320">
+ <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, user-scalable=no, minimal-ui">
+ <meta name="format-detection" content="telephone=no">
+ <meta name="format-detection" content="address=no">
+ <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+ <!-- css -->
+ <link rel="stylesheet" href="../assets/css/normalize.min.css">
+ <link rel="stylesheet" href="../assets/css/site.min.css">
+ <!-- js -->
+ <script src="../assets/js/jquery-2.1.4.min.js"></script>
+ <script src="../assets/js/jquery-ui-widget-factory-only.js"></script>
+ <script src="jqueryui.spells.js"></script>
+</head>
+<body itemscope itemtype="http://schema.org/WebPage">
+ <header class="l-header" role="banner">
+  the header
+ </header>
+ <main id="l-content" class="l-wrapper" itemscope itemtype="http://schema.org/WebPageElement" itemprop="mainContentOfPage" role="main">
+  <!-- content -->
+  <h1>Spells!</h1>
+  <p>Click the button to cast a spell of random power</p>
+
+  <section>
+   <div id="spellCaster1" data-spell data-spellname="Stupefy" data-spellpower="5">
+    spell container, instantiated using `data` attribute
+   </div>
+   <button class="c-btn js-cast-spell">Cast Spell</button>
+  </section>
+
+  <section>
+   <div id="spellCaster2">
+    spell container, called from the javascript
+   </div>
+   <button class="c-btn js-cast-spell">Cast Spell</button>
+  </section>
+
+  <script>
+   $(document).on("ready", function(e){
+    // create a spell caster by calling the widget from the javascript
+    $("#spellCaster2").spell({
+     spellname: "Levicorpus",
+     spellpower: 2
+    });
+
+    $("#l-content").on("click", ".js-cast-spell", function(e){
+     $(this)
+      .closest("section")
+       .find(".spell-container") // get the spell caster container
+        .spell("cast", Math.floor(Math.random() * 1000));
+    })
+   })
+  </script>
+  <!-- /content -->
+ </main>
+ </body>
+</html>

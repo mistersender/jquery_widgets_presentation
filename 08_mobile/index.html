@@ -1,0 +1,101 @@
+<!doctype html>
+<html lang="en">
+<head>
+ <title>Spells Widget</title>
+ <meta charset="utf-8">
+ <meta http-equiv="cleartype" content="on">
+ <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+ <meta name="description" content="Spells Widget">
+ <meta name="HandheldFriendly" content="True">
+ <meta name="MobileOptimized" content="320">
+ <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, user-scalable=no, minimal-ui">
+ <meta name="format-detection" content="telephone=no">
+ <meta name="format-detection" content="address=no">
+ <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+ <!-- css -->
+ <link rel="stylesheet" href="jquery.mobile.custom/jquery.mobile.custom.structure.min.css">
+ <link rel="stylesheet" href="jquery.mobile.custom/jquery.mobile.custom.theme.min.css">
+ <link rel="stylesheet" href="../assets/css/site.min.css">
+ <!-- js -->
+ <script src="../assets/js/jquery-2.1.4.min.js"></script>
+ <script src="jquery.mobile.custom/jquery.mobile.custom.min.js"></script>
+ <script src="jqueryui.spells.js"></script>
+</head>
+<body itemscope itemtype="http://schema.org/WebPage">
+ <main id="l-content" itemscope itemtype="http://schema.org/WebPageElement" itemprop="mainContentOfPage" role="main">
+  <!-- First page -->
+  <div id="page1" data-role="page" data-theme="a">
+   <h1>jQuery Mobile</h1>
+   <a href="#page2">Next</a>
+   <section>
+    <div id="spellCaster1" data-spell data-spellname="Stupefy" data-spellpower="5">
+     spell container, instantiated using `data` attribute
+    </div>
+    <!-- add some options for spells to cast -->
+    <select name="name">
+     <option value="Expelliarmus">Expelliarmus</option>
+     <option value="Stupefy" selected>Stupefy</option>
+     <option value="Levicorpus">Levicorpus</option>
+     <option value="Avada Kedavera">Avada Kedavera</option>
+    </select>
+    <input type="number" name="power" value="5">
+   </section>
+  </div>
+
+  <!-- Second page -->
+  <div id="page2" data-role="page" data-theme="a">
+   <a href="#page1">Back</a>
+   <section>
+    <div id="spellCaster2" data-spell data-spellname="Stupefy" data-spellpower="5">
+     spell container, instantiated using `data` attribute
+    </div>
+    <!-- add some options for spells to cast -->
+    <select name="name">
+     <option value="Expelliarmus">Expelliarmus</option>
+     <option value="Stupefy" selected>Stupefy</option>
+     <option value="Levicorpus">Levicorpus</option>
+     <option value="Avada Kedavera">Avada Kedavera</option>
+    </select>
+    <input type="number" name="power" value="5">
+   </section>
+  </div>
+
+  <script>
+   $(document).one("pageinit", function(e){
+
+    $("#l-content")
+     // if a user changes spells on EITHER page, update the widget
+     .on("change", "select[name=name]", function(e){
+      $(this)
+       .closest("section")
+        .find(".spell-container") // get the spell caster container
+         .spell("option", "spellname", this.value); // change the spell being cast
+     })
+     // if a users changes the power of the spell, update the widget
+     .on("change", "input[name=power]", function(e){
+      $(this)
+       .closest("section")
+        .find(".spell-container") // get the spell caster container
+         .spell("option", "spellpower", this.value); // change the power of the spell being cast
+     })
+     // notify the user their change of options took place by listening for the setoption triggered event
+     .on("spellsetoption", ".spell-container", function(e, data){
+      $(this)
+       .find(".spell-container__last_cast")
+        .html("Changed spell " + (data.option == "spellname" ? "name" : "power") + " from <b>" + data.original + "</b> to <b>" + data.current + "</b>");
+     })
+     // make sure the user isn't trying to kill people willy-nilly (in either spellCaster instance
+     .on("spellaftercast", ".spell-container", function(event, data){
+      // if the spell being cast was avada kedavera, tell the user that's unforgivable.
+      if($(this).spell("option", "spellname") == "Avada Kedavera"){
+       alert("Avada Kedavera at " + data.actual_power + "?! Unforgivable. You're done here.");
+       $(this).spell("destroy");
+      }
+     });
+
+   })
+  </script>
+  <!-- /content -->
+ </main>
+ </body>
+</html>
