@@ -71,7 +71,7 @@
 
   // actually cast the spell based on the currently set options & the complexity of the spell
   cast: function(complexity){
-   var self = this;
+   var self = this,
        actual_power = self._calculatePower(self.options.spellpower, complexity || 0);
    self._trigger("beforecast", null, { actual_power: actual_power });
    self.global.score = self.global.score + actual_power;
