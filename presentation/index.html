@@ -404,6 +404,8 @@
   <h3>Calling methods</h3>
   <pre><code>
   $("button").on("click", function(e){
+
+   // call in to this instance of spell
    $("#spellCaster1").spell("cast", 78);
   });
   </code></pre>
@@ -411,11 +413,88 @@
   <a href="../03_methods/" target="_blank">Check it out!</a>
 
   <aside class="notes">
+   each additional argument is a comma delimited list or a hash
+
    Keep in mind, `_` functions are not callable. won't work:
    `$("#spellCaster1").spell("_calculate_power", 78, 10);`
+
+   at this point, our widget works
+   but power is random, so let's calculate it
   </aside>
  </section>
 </section>
+
+<section>
+ <h3>We need Events!</h3>
+ <p>When the wand is pressed, calculate time till it's released.</p>
+</section>
+
+<section>
+ <section>
+  <pre><code>
+  // call this from _create()
+  _add_events: function(){
+   var self = this,
+       power_interval,
+       power;
+   self.element
+    .on("touchstart.spell mousedown.spell", ".spell-container__wand", function(e){
+     power = 0; // reset power to 0 every time
+     power_interval = setInterval(function(){
+      power++
+     }, 20);
+    })
+    .on("touchend.spell mouseup.spell", ".spell-container__wand", function(e){
+     clearInterval(power_interval);
+     self.cast(power);
+    });
+  }
+  </code></pre>
+  <aside class="notes" data-markdown>
+   a lot of stuff is happening here.
+   * variables are set
+   * self.element used
+   * events added
+   * math happening
+   * calling cast
+  </aside>
+ </section>
+
+ <section>
+  <h3>self.element</h3>
+  <pre><code>
+   var self = this;
+
+   self.element
+  </code></pre>
+  <p>Contains the element the widget is attached to</p>
+ </section>
+
+ <section>
+  <h3>Namespacing events</h3>
+  <pre><code>
+  .on("touchstart.spell mousedown.spell", ".spell-container__wand", function(e){
+  </code></pre>
+  <p class="fragment">namespace goes <b>after</b> the event.</p>
+  <p class="fragment">namespace should be the same as your widget's name</p>
+  <aside class="notes">
+   * namespaces go after the event
+   * same as widget's name
+   jQuery stores namespaced events together internally to make them easier to locate and manipulate. more on this later.
+  </aside>
+ </section>
+
+</section>
+
+<section>
+ <h2>Now we're getting somewhere!</h2>
+ <a href="../04_events/" target="_blank">Check it out!</a>
+ <p class="fragment">But users want to cast more than 1 lame spell</p>
+ <aside class="notes">
+  [frag] But I want to cast more than 1 lame spell
+ </aside>
+</section>
+
 </div><!-- end slides div -->
 </div><!-- end reveal div -->
 
