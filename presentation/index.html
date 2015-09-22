@@ -377,6 +377,45 @@
  </aside>
 </section>
 
+<section>
+ <section>
+  <h3>Custom Methods</h3>
+  <pre><code>
+   // actually cast the spell based on the currently set options & the complexity of the spell
+   cast: function(complexity){
+    var self = this,
+        actual_power = self._calculatePower(self.options.spellpower, complexity || 0);
+    self.global.score = self.global.score + actual_power;
+    self.global.elem.$score.text(self.global.score);
+    self.global.elem.$last_cast.html("<b>" + self.options.spellname + "</b> @ " + actual_power);
+   }
+  </code></pre>
+  <aside class="notes">
+   creates a method called "cast" that any developer can call on your widget.
+
+   Let's not worry about _calculate_power. it's a private function that returns a number
+   based on the base power of the spell and the entered complexity.
+
+   So how do we call this?
+  </aside>
+ </section>
+
+ <section>
+  <h3>Calling methods</h3>
+  <pre><code>
+  $("button").on("click", function(e){
+   $("#spellCaster1").spell("cast", 78);
+  });
+  </code></pre>
+
+  <a href="../03_methods/" target="_blank">Check it out!</a>
+
+  <aside class="notes">
+   Keep in mind, `_` functions are not callable. won't work:
+   `$("#spellCaster1").spell("_calculate_power", 78, 10);`
+  </aside>
+ </section>
+</section>
 </div><!-- end slides div -->
 </div><!-- end reveal div -->
 
