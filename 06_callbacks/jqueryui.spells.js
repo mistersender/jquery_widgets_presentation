@@ -40,7 +40,7 @@
 
    // Add a class to our container
    self.element
-    .addClass("spell-container spell-container--" + self.options.spellname.replace(" ", "-", "all"))
+    .addClass("spell-container spell-container--" + self.options.spellname.replace(" ", "-", "all").toLowerCase())
     // now let's add our globally cached elements to the widget.
     .append(self.global.elem.$info, self.global.elem.$last_cast, self.global.elem.$score, self.global.elem.$wand);
   },

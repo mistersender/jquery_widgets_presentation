@@ -39,7 +39,7 @@
 
    // Add a class to our container
    self.element
-    .addClass("spell-container spell-container--" + self.options.spellname.replace(" ", "-", "all"))
+    .addClass("spell-container spell-container--" + self.options.spellname.replace(" ", "-", "all").toLowerCase())
     // now let's add our globally cached elements to the widget.
     .append(self.global.elem.$info, self.global.elem.$last_cast, self.global.elem.$score, self.global.elem.$wand);
   },
@@ -80,8 +80,8 @@
  }); // end widget creation
 
  // optional: if you want the widget to always run immediately on page load using `data-`, comment this code in
- // $(document).on("ready", function(e){
- //  $("body [data-spell]").spell();
- // });
+ $(document).on("ready", function(e){
+  $("body [data-spell]").spell();
+ });
 
 })(jQuery);
