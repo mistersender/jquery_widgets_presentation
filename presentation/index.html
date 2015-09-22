@@ -128,7 +128,7 @@
   $.widget("namespace.boilerplate", {});
  </code></pre>
 
- <p>Namespace is used to add data to the element for maintaining state.</p>
+ <p>The namespace is used to add data to the element for maintaining state.</p>
  <!-- @todo {!} add image of data-whatever-whatever instead of this lame code block -->
  <pre><code>
   data{
@@ -154,6 +154,76 @@
  </aside>
 </section>
 
+<section>
+ <h2>Give it a name!</h2>
+ <h3 class="fragment">mf.spell()</mf>
+ <aside class="notes">
+  Our widget needs a name.
+  Our widget is going to cast a spell,
+  so let's call it `spell()`
+ </aside>
+</section>
+
+<section>
+ <pre><code>
+  ;(function($, undefined){
+   $.widget("mf.spell", {
+   });
+  })(jQuery);
+ </code></pre>
+
+ <p class="fragment">That's nice...<br> But it doesn't do anything!</p>
+ <aside class="notes">
+  always wrap in a closure, because best practices.
+
+  But at this point, it doesn't do anything.
+ </aside>
+</section>
+
+<section>
+ <h3>What should it do?</h3>
+ <ul>
+  <li class="fragment">Cast a spell</li>
+  <li class="fragment">make the spell have a variable strength</li>
+ </ul>
+ <aside class="notes">
+  But that's boring. Let's let the spells have a strength.
+ </aside>
+</section>
+<section>
+ <section>
+  <h3>Options</h3>
+  <pre><code>
+   $.widget("mf.spell", {
+    // define out options for the widget, which are handled by the factory.
+    options: {
+     spellname: "",
+     spellpower: 1
+    }
+   });
+  </code></pre>
+  <aside class="notes">
+   widget factory expects options to be used.
+   * should always define `options` in the prototype
+   * defaults should be set here
+   we have default options, but how do we override them?
+  </aside>
+ </section>
+
+ <section>
+  <h3>Overriding options</h3>
+  <pre><code>
+   $("#spellCaster2").spell({
+    spellname: "Levicorpus",
+    spellpower: 2
+   });
+  </code></pre>
+  <aside class="notes">
+   Factory handles setting overrides initially
+   we have optoins, but what do we do with them?
+  </aside>
+ </section>
+</section>
 </div><!-- end slides div -->
 </div><!-- end reveal div -->
 
