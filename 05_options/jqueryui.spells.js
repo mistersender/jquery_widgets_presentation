@@ -81,7 +81,7 @@
   // util to figure out how powerful a spell is based on complexity & base power
   _calculatePower: function(base_power, complexity){ // returns power of a move
    var self = this;
-   return Math.round(base_power * (complexity / 100));
+   return Math.round(base_power * (complexity / 20));
   },
 
   // _setOption is a required private function for widgets. It should handle setting each option if any additional work is needed.
