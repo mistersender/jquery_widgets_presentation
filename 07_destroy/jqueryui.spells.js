@@ -1,5 +1,3 @@
-//http://test.site/widgets/spells/06_destroy/
-
 // @author Jessica Kennedy
 // @name Spell Caster Widget
 ;(function($, undefined){
@@ -20,7 +18,7 @@
    self.global = { // contain any global private variables
     score: 0,
     elem: {
-     $last_cast: $("<aside class='spell-container__last_cast'>"),
+     $last_cast: $("<aside class='spell-container__last-cast'>"),
      $info: $("<aside class='spell-container__info'>"),
      $score: $("<aside class='spell-container__score'>0</aside>"),
      $wand: $("<figure class='spell-container__wand'>Wand</figure>")
@@ -48,24 +46,28 @@
   _build_info: function(){
    var self = this;
    // set up the info on the spell we are casting
-   self.global.elem.$info.html("<b class='spell_container__name'>" + self.options.spellname + "</b> " + "<span class='spell_container__power'>" + self.options.spellpower + "</span>");
+   self.global.elem.$info.html("<b class='spell-container__name'>" + self.options.spellname + "</b> " + "<span class='spell-container__power'>" + self.options.spellpower + "</span>");
   },
 
   // add any events associated with the widget
   _add_events: function(){
    var self = this,
        power_interval,
-       power;
+       power = 0;
    self.element
-    .on("touchstart.spell mousedown.spell", ".spell-container__wand", function(e){
-     power = 0; // reset power to 0 every time
+    .on("mousedown.spell", ".spell-container__wand", function(e){
+     self.element.addClass("is-casting");
      power_interval = setInterval(function(){
       power++
      }, 20);
     })
-    .on("touchend.spell mouseup.spell", ".spell-container__wand", function(e){
-     clearInterval(power_interval);
-     self.cast(power);
+    .on("mouseup.spell mouseout.spell", ".spell-container__wand", function(e){
+     if(power){
+      clearInterval(power_interval);
+      self.element.removeClass("is-casting");
+      self.cast(power);
+      power = 0; // reset power to 0 every time
+     }
     });
   },
 
@@ -83,7 +85,7 @@
   // util to figure out how powerful a spell is based on complexity & base power
   _calculatePower: function(base_power, complexity){ // returns power of a move
    var self = this;
-   return Math.round(base_power * (complexity / 100));
+   return Math.round(base_power * (complexity / 20));
   },
 
   // _setOption is a required private function for widgets. It should handle setting each option if any additional work is needed.
@@ -97,8 +99,8 @@
 
          // change out the class on the main element
          self.element
-          .removeClass("spell-container--" + old_value.replace(" ", "-", "all"))
-          .addClass("spell-container--" + value.replace(" ", "-", "all"));
+          .removeClass("spell-container--" + old_value.replace(" ", "-", "all").toLowerCase())
+          .addClass("spell-container--" + value.replace(" ", "-", "all").toLowerCase());
         },
         spellpower: function(){
          // update the info for the spell

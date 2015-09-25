@@ -1,10 +1,7 @@
-//http://test.site/widgets/spells/01_boilerplate/
-
 // @author Jessica Kennedy
 // @name  boilerplate Widget
 ;(function($, undefined){
 
- // use `mobile` namespace for jQuery mobile widgets
  $.widget("namespace.boilerplate", {
   options: { // define out all options for the widget, which are handled by the factory.
   },

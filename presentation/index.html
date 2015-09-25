@@ -9,7 +9,7 @@
 	<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
 	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui">
 	<link rel="stylesheet" href="css/reveal.css">
-	<link rel="stylesheet" href="css/theme/black.css" id="theme">
+	<link rel="stylesheet" href="css/theme/night.css" id="theme">
 	<!-- Code syntax highlighting -->
 	<link rel="stylesheet" href="lib/css/zenburn.css">
 	<!-- Printing and PDF exports -->
@@ -184,7 +184,7 @@
  <h3>What should it do?</h3>
  <ul>
   <li class="fragment">Cast a spell</li>
-  <li class="fragment">make the spell have a variable strength</li>
+  <li class="fragment">Make the spell have a variable strength</li>
  </ul>
  <aside class="notes">
   But that's boring. Let's let the spells have a strength.
@@ -299,7 +299,7 @@
    self.global = {
     score: 0,
     elem: {
-     $last_cast: $("<aside class='spell-container__last_cast'></aside>"),
+     $last_cast: $("<aside class='spell-container__last-cast'></aside>"),
      $info: $("<aside class='spell-container__info'></aside>"),
      $score: $("<aside class='spell-container__score'>0</aside>"),
      $wand: $("<figure class='spell-container__wand'>Wand</figure>")
@@ -324,7 +324,7 @@
 
 <section>
  <h3>_build()</h3>
- <p>(Not part of factory)</p>
+ <p>(Not part of factory) Called in `_create()`</p>
  <pre><code>
   _create: function(){
    var self = this;
@@ -353,11 +353,11 @@
    var self = this;
 
    // set up the info on the spell we are casting
-   self.global.elem.$info.html("<b class='spell_container__name'>" + self.options.spellname + "</b> " + "<span class='spell_container__power'>" + self.options.spellpower + "</span>");
+   self.global.elem.$info.html("<b class='spell-container__name'>" + self.options.spellname + "</b> " + "<span class='spell-container__power'>" + self.options.spellpower + "</span>");
 
    // Add a class to our container
    self.element
-    .addClass("spell-container spell-container--" + self.options.spellname.replace(" ", "-", "all"))
+    .addClass("spell-container spell-container--" + self.options.spellname.replace(" ", "-", "all").toLowerCase())
     // now let's add our globally cached elements to the widget.
     .append(self.global.elem.$info, self.global.elem.$last_cast, self.global.elem.$score, self.global.elem.$wand);
   }
@@ -367,7 +367,6 @@
 <section>
  <h2>It's doing something!</h2>
  <a href="../02_create/" target="_blank">Check it out!</a>
- <p class="fragment">Thanks to <a href="codepen.io">Brandon Kennedy</a> for this baller css.</p>
  <aside class="notes">
   That's great! But it's not doing much.
 
@@ -428,21 +427,24 @@
 
 <section>
  <pre><code>
- // call this from _create()
  _add_events: function(){
   var self = this,
       power_interval,
-      power;
+      power = 0;
   self.element
-   .on("touchstart.spell mousedown.spell", ".spell-container__wand", function(e){
-    power = 0; // reset power to 0 every time
+   .on("mousedown.spell", ".spell-container__wand", function(e){
+    self.element.addClass("is-casting");
     power_interval = setInterval(function(){
      power++
     }, 20);
    })
-   .on("touchend.spell mouseup.spell", ".spell-container__wand", function(e){
-    clearInterval(power_interval);
-    self.cast(power);
+   .on("mouseup.spell mouseout.spell", ".spell-container__wand", function(e){
+    if(power){
+     clearInterval(power_interval);
+     self.element.removeClass("is-casting");
+     self.cast(power);
+     power = 0; // reset power to 0 every time
+    }
    });
  }
  </code></pre>
@@ -469,7 +471,7 @@
 <section>
  <h3>Namespacing events</h3>
  <pre><code>
- .on("touchstart.spell mousedown.spell", ".spell-container__wand", function(e){
+ .on("mouseup.spell mouseout.spell", ".spell-container__wand", function(e){
  </code></pre>
  <p class="fragment">namespace goes <b>after</b> the event.</p>
  <p class="fragment">namespace should be the same as your widget's name</p>
@@ -631,8 +633,8 @@
   self._trigger("aftercast", null, { actual_power: actual_power });
  </code></pre>
  <aside class="notes" data-markdown>
-  let's say we want to have an alert appear for anyone who
-  casts an unforgivable curse, which we all know is avada kedavera.
+  let's say we want to have an alert appear to let the user
+  know their spell was cast, or an option changed.
 
   * aftercast - the name of the custom event/callback
   * null - a jQuery event object that initiated the callback
@@ -646,16 +648,14 @@
  <pre><code>
   // bind an event listener to spellCaster1 to display the unforgivable curse messaging.
   $("#spellCaster1").on("spellaftercast", function(event, data){
-
-   // if the spell being cast was avada kedavera, tell the user that's unforgivable.
-   if($(this).spell("option", "spellname") == "Avada Kedavera"){
-    alert("Avada Kedavera at " + data.actual_power + "?! Unforgivable.");
-   }
+   // show user the last thing cast
+   show_last_cast.apply(this);
   });
  </code></pre>
  <aside class="notes">
   notice `spell` has been prepended.
   we can see the name of the spell and use that to display messaging.
+  could use `data.actual_power` in event as well if we needed to.
  </aside>
 </section>
 <section>
@@ -663,13 +663,10 @@
  <p>Or pass a callback in to the widget's init.</p>
  <pre><code>
   $("#spellCaster2").spell({
-    // pass a call back directly in to the initialized widget
+    // pass a callback directly in to the initialized widget
     aftercast: function(event, data){
-
-      // if the spell being cast was avada kedavera, tell the user that's unforgivable.
-      if($(this).spell("option", "spellname") == "Avada Kedavera"){
-       alert("Avada Kedavera at " + data.actual_power + "?! Unforgivable.");
-      }
+      // show user the last thing cast
+      show_last_cast.apply(this);
     }
   });
  </code></pre>
@@ -680,8 +677,8 @@
 
 <section>
  <h2>The widget is built!</h2>
- <a href="../05_options/" target="_blank">Check it out!</a>
- <p>But it's not done yet...</p>
+ <a href="../06_callbacks/" target="_blank">Check it out!</a>
+ <p class="fragment">But it's not done yet...</p>
 </section>
 
 <section>
@@ -720,7 +717,7 @@
    self.element.off(".spell");
 
    // remove the classes from the element
-   self.element.removeClass("spell-container spell-container--" + self.options.spellname.replace(" ", "-", "all"));
+   self.element.removeClass("spell-container spell-container--" + self.options.spellname.replace(" ", "-", "all").toLowerCase());
 
    // remove our global elements too
    self.global.elem.$info.remove();
@@ -748,7 +745,7 @@
  <p>Take those classes/data/etc back out.</p>
  <pre><code>
   // remove the classes from the element
-  self.element.removeClass("spell-container spell-container--" + self.options.spellname.replace(" ", "-", "all"));
+  self.element.removeClass("spell-container spell-container--" + self.options.spellname.replace(" ", "-", "all").toLowerCase());
  </code></pre>
 </section>
 
@@ -814,6 +811,16 @@
  <aside class="notes">
   find all instances of data-spell
   does the thing itself have data-spell on it?
+ </aside>
+</section>
+
+<section>
+ <h2>jQuery Mobile Widgetized!</h2>
+ <a href="../08_mobile/" target="_blank">Check it out!</a>
+ <aside class="notes">
+  Let's not dwell on the ugliness we're about to see.
+
+  Click through both pages
  </aside>
 </section>
 

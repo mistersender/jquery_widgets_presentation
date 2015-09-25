@@ -21,9 +21,6 @@
  <script src="jqueryui.spells.js"></script>
 </head>
 <body itemscope itemtype="http://schema.org/WebPage">
- <header class="l-header" role="banner">
-  the header
- </header>
  <main id="l-content" class="l-wrapper" itemscope itemtype="http://schema.org/WebPageElement" itemprop="mainContentOfPage" role="main">
   <!-- content -->
   <h1>Callbacks</h1>
@@ -83,8 +80,10 @@
      // notify the user their change of options took place by listening for the setoption triggered event
      .on("spellsetoption", ".spell-container", function(e, data){
       $(this)
-       .find(".spell-container__last_cast")
-        .html("Changed spell " + (data.option == "spellname" ? "name" : "power") + " from <b>" + data.original + "</b> to <b>" + data.current + "</b>");
+       .find(".spell-container__last-cast")
+        .html("Changed spell " + (data.option == "spellname" ? "name" : "power") + " from <b>" + data.original + "</b> to <b>" + data.current + "</b>")
+      // reuse show last cast function
+      show_last_cast.apply(this);
      })
      // make sure the user isn't trying to kill people willy-nilly (in either spellCaster instance
      .on("spellaftercast", ".spell-container", function(event, data){
@@ -93,8 +92,20 @@
        alert("Avada Kedavera at " + data.actual_power + "?! Unforgivable. You're done here.");
        $(this).spell("destroy");
       }
+
+      // show user the last thing cast
+      show_last_cast.apply(this);
      });
 
+    // display the last item cast
+    // call with .apply on the current spell caster.
+    function show_last_cast(){
+     var $last_cast = $(this).find(".spell-container__last-cast");
+     $last_cast.addClass("is-active");
+     setTimeout(function(){
+      $last_cast.removeClass("is-active");
+     }, 2000);
+    }
    })
   </script>
   <!-- /content -->

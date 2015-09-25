@@ -1,0 +1,193 @@
+* {
+  box-sizing: border-box;
+}
+
+main {
+  color: #222;
+  margin: 0 3vw;
+  width: 94vw;
+}
+
+section {
+  padding-top: 1rem;
+  padding-bottom: 3rem;
+}
+
+select, input {
+  border: 2px solid #222;
+  border-radius: .3rem;
+  font-size: 1.2rem;
+  line-height: 1.35em;
+  padding: 0 .4em;
+}
+
+input {
+  width: 5em;
+}
+
+.spell-container__info {
+  border-radius: 0.4rem;
+  box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.5);
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  font-size: 0;
+  line-height: 2rem;
+  margin-top: .5rem;
+  width: 70%;
+  z-index: 10;
+}
+.spell-container__name, .spell-container__power, .spell-container__score {
+  background: white;
+  border: 2px solid #c2c2c2;
+  border-radius: 0.4rem 0 0 0.4rem;
+  border-right: none;
+  display: inline-block;
+  -webkit-box-flex: 2;
+  -webkit-flex-grow: 2;
+      -ms-flex-positive: 2;
+          flex-grow: 2;
+  font-size: 1.2rem;
+  font-weight: normal;
+  line-height: 2em;
+  -webkit-box-ordinal-group: 2;
+  -webkit-order: 1;
+      -ms-flex-order: 1;
+          order: 1;
+  padding: 0 .6em;
+}
+.spell-container__power, .spell-container__score {
+  background: #5aeba6;
+  border: 2px solid #4cc78d;
+  border-radius: 0 0.4rem 0.4rem 0;
+  -webkit-box-flex: 0;
+  -webkit-flex-grow: 0;
+      -ms-flex-positive: 0;
+          flex-grow: 0;
+  -webkit-box-ordinal-group: 3;
+  -webkit-order: 2;
+      -ms-flex-order: 2;
+          order: 2;
+}
+.spell-container__power:before, .spell-container__score:before {
+  content: "+ ";
+  position: relative;
+  top: -.05em;
+}
+.spell-container__last-cast {
+  background: #c0d4f7;
+  border: 2px solid #93b5f1;
+  border-radius: 0 0 0.4rem 0.4rem;
+  margin: 0;
+  min-height: 1.9rem;
+  padding: .4rem .4rem .3rem;
+  position: relative;
+  text-align: center;
+  top: -.26rem;
+  -webkit-transform: translateY(-2rem);
+      -ms-transform: translateY(-2rem);
+          transform: translateY(-2rem);
+  -webkit-transition: -webkit-transform .2s ease-in-out;
+          transition: transform .2s ease-in-out;
+  width: 70%;
+  z-index: -1;
+}
+.spell-container__last-cast.is-active {
+  -webkit-transform: translateY(0);
+      -ms-transform: translateY(0);
+          transform: translateY(0);
+}
+.spell-container__score {
+  background: #ffcfc6;
+  border: 2px solid tomato;
+  border-radius: 0.4rem;
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  font-weight: bold;
+  overflow: hidden;
+  padding: 0;
+  padding-right: .6em;
+  width: 70%;
+}
+.spell-container__score:before {
+  background: white;
+  border-right: 2px solid tomato;
+  content: "Total Score";
+  -webkit-box-flex: 1;
+  -webkit-flex-grow: 1;
+      -ms-flex-positive: 1;
+          flex-grow: 1;
+  margin-right: 1.8em;
+  padding: 0;
+  padding-left: .6em;
+  top: 0;
+}
+
+/* The "Fun" stuff */
+
+/* start pen display only */
+header {
+  text-align: center;
+}
+
+label {
+  margin-right: .5em;
+}
+
+input {
+  margin: 0 .2em;
+}
+
+/* end pen display only */
+.spell-container {
+  height: 340px;
+  position: relative;
+}
+
+.spell-container__wand {
+  background: brown;
+  text-indent: -999em;
+  height: 50px;
+  left: 0;
+  position: relative;
+  top: 50px;
+  -webkit-transform: rotate(60deg);
+      -ms-transform: rotate(60deg);
+          transform: rotate(60deg);
+  width: 3px;
+}
+
+.spell-container__wand:after {
+ content: "";
+ display: block;
+ border-radius: 50%;
+ -webkit-filter: blur(0.5em);
+ filter: blur(0.5em);
+ opacity: 0;
+ font-size: 10px;
+ width: 0;
+ height: 0;
+}
+
+.is-casting .spell-container__wand:after{
+ opacity: 1;
+ transition: opacity 1.5s ease-in-out;
+ -moz-transition: opacity 1.5s ease-in-out;
+ -webkit-transition: opacity 1.5s ease-in-out;
+}
+
+.spell-container--expelliarmus .spell-container__wand:after{
+ box-shadow: 0 -50px 40px 20px grey
+}
+.spell-container--stupefy .spell-container__wand:after{
+ box-shadow: 0 -50px 40px 20px purple
+}
+.spell-container--levicorpus .spell-container__wand:after{
+ box-shadow: 0 -50px 40px 20px blue
+}
+.spell-container--avada-kedavera .spell-container__wand:after{
+ box-shadow: 0 -50px 40px 20px green
+}
