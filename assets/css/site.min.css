@@ -25,6 +25,19 @@ input {
   width: 5em;
 }
 
+code{
+ background: #fdf3f2;
+ color: #e43725;
+ border-radius: .3em;
+ display: inline;
+ font: 700 .8em/1.2em "Source Code Pro";
+ margin: 0 .2em;
+ padding: .2em .4em .3em;
+ position: relative;
+ top: -.05em;
+ white-space: nowrap;
+}
+
 /* end pen display only */
 .spell-container {
   height: 260px;
@@ -33,6 +46,7 @@ input {
   padding: 0;
   position: relative;
   overflow: hidden;
+  z-index: 1; /* allows jquery mobile to work better since jqm adds a background to body */
 }
 .spell-container:after{
  content: "Spell Widget";
@@ -148,4 +162,23 @@ input {
 }
 .spell-container--avada-kedavera .spell-container__wand:after{
  box-shadow: 40px -60px 40px 20px green
+}
+
+/* jquery mobile style overrides */
+
+.ui-page{
+ padding: 2em;
+}
+.ui-btn-icon-left:after, .ui-btn-icon-right:after, .ui-btn-icon-top:after, .ui-btn-icon-bottom:after, .ui-btn-icon-notext:after {
+  background-color: transparent;
+  background-position: center center;
+  background-repeat: no-repeat;
+  -webkit-border-radius: 1em;
+  border-radius: 0;
+  border: 10px solid transparent;
+  border-radius: 0;
+  border-top-color: #666;
+  width: 0;
+  height: 0;
+  top: 1.8em;
 }

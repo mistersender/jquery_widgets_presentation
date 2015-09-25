@@ -57,9 +57,18 @@
   }
  }); // end widget creation
 
- // optional: if you want the widget to always run immediately on page load using `data-`, comment this code in
+ // optional: if you want the widget to always run immediately on page load using `data-`, comment this code in (not jQuery Mobile)
  // $(document).on("ready", function(e){
  //  $("body [data-boilerplate]").boilerplate();
+ // });
+
+ // optional: if you want the widget to work with jQuery Mobile, comment this code in
+ // $(document).on("pageinit", function(e){
+ //  var $target = $(e.target); // get the target, which should be the page being created
+ //  // find all instances in the page of the widget and instantiate the widget on those
+ //  $target.find(":jqmData(spell)").spell();
+ //  // if the page itself is the widget, instantiate it
+ //  $target.is(":jqmData(spell)") && $target.spell();
  // });
 
 })(jQuery);
