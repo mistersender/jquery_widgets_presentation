@@ -21,22 +21,24 @@
  <script src="jqueryui.spells.js"></script>
 </head>
 <body itemscope itemtype="http://schema.org/WebPage">
- <header class="l-header" role="banner">
-  the header
- </header>
  <main id="l-content" class="l-wrapper" itemscope itemtype="http://schema.org/WebPageElement" itemprop="mainContentOfPage" role="main">
   <!-- content -->
-  <h1>Spells!</h1>
-  <p>Let's start practicing your favorite spells</p>
+  <h1>Create</h1>
+  <p>The widgets below were created in 2 different ways.</p>
 
-  <div id="spellCaster1" data-spell data-spellname="Stupefy" data-spelltype="hex" data-spellpower="5">
-   spell container, instantiated using `data` attribute
-  </div>
-  <br>
+  <section>
+   <h3>Created using <code>data</code></h3>
+   <div id="spellCaster1" data-spell data-spellname="Stupefy" data-spellpower="5">
+    spell container, instantiated using <code>data</code> attribute
+   </div>
+  </section>
 
-  <div id="spellCaster2">
-   spell container, called from the javascript
-  </div>
+  <section>
+   <h3>Created from javascript</h3>
+   <div id="spellCaster2">
+    spell container, called from the javascript
+   </div>
+  </section>
 
   <script>
    $(document).on("ready", function(e){

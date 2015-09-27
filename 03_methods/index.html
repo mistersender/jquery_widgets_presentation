@@ -21,17 +21,14 @@
  <script src="jqueryui.spells.js"></script>
 </head>
 <body itemscope itemtype="http://schema.org/WebPage">
- <header class="l-header" role="banner">
-  the header
- </header>
  <main id="l-content" class="l-wrapper" itemscope itemtype="http://schema.org/WebPageElement" itemprop="mainContentOfPage" role="main">
   <!-- content -->
-  <h1>Spells!</h1>
-  <p>Click the button to cast a spell of random power</p>
+  <h1>Methods</h1>
+  <p>Click the button to call the <code>cast</code> method, which casts a spell of random strength.</p>
 
   <section>
    <div id="spellCaster1" data-spell data-spellname="Stupefy" data-spellpower="5">
-    spell container, instantiated using `data` attribute
+    spell container, instantiated using <code>data</code> attribute
    </div>
    <button class="c-btn js-cast-spell">Cast Spell</button>
   </section>
@@ -55,7 +52,7 @@
      $(this)
       .closest("section")
        .find(".spell-container") // get the spell caster container
-        .spell("cast", Math.floor(Math.random() * 1000));
+        .spell("cast", Math.floor(Math.random() * 1000)); // call "cast" method
     })
    })
   </script>

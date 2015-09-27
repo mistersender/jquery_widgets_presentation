@@ -1,5 +1,3 @@
-//http://test.site/widgets/spells/02_create/
-
 // @author Jessica Kennedy
 // @name Spell Caster Widget
 ;(function($, undefined){
@@ -20,7 +18,7 @@
    self.global = { // contain any global private variables
     score: 0,
     elem: {
-     $last_cast: $("<aside class='spell-container__last_cast'>"),
+     $last_cast: $("<aside class='spell-container__last-cast'>"),
      $info: $("<aside class='spell-container__info'>"),
      $score: $("<aside class='spell-container__score'>0</aside>"),
      $wand: $("<figure class='spell-container__wand'>Wand</figure>")
@@ -36,11 +34,11 @@
   _build: function(){
    var self = this;
    // set up the info on the spell we are casting
-   self.global.elem.$info.html("<b class='spell_container__name'>" + self.options.spellname + "</b> " + "<span class='spell_container__power'>" + self.options.spellpower + "</span>");
+   self.global.elem.$info.html("<b class='spell-container__name'>" + self.options.spellname + "</b> " + "<span class='spell-container__power'>" + self.options.spellpower + "</span>");
 
    // Add a class to our container
    self.element
-    .addClass("spell-container spell-container--" + self.options.spellname.replace(" ", "-", "all"))
+    .addClass("spell-container spell-container--" + self.options.spellname.replace(" ", "-", "all").toLowerCase())
     // now let's add our globally cached elements to the widget.
     .append(self.global.elem.$info, self.global.elem.$last_cast, self.global.elem.$score, self.global.elem.$wand);
   },
@@ -49,23 +47,27 @@
   _add_events: function(){
    var self = this,
        power_interval,
-       power;
+       power = 0;
    self.element
-    .on("touchstart.spell mousedown.spell", ".spell-container__wand", function(e){
-     power = 0; // reset power to 0 every time
+    .on("mousedown.spell", ".spell-container__wand", function(e){
+     self.element.addClass("is-casting");
      power_interval = setInterval(function(){
       power++
      }, 20);
     })
-    .on("touchend.spell mouseup.spell", ".spell-container__wand", function(e){
-     clearInterval(power_interval);
-     self.cast(power);
+    .on("mouseup.spell mouseout.spell", ".spell-container__wand", function(e){
+     if(power){
+      clearInterval(power_interval);
+      self.element.removeClass("is-casting");
+      self.cast(power);
+      power = 0; // reset power to 0 every time
+     }
     });
   },
 
   // actually cast the spell based on the currently set options & the complexity of the spell
   cast: function(complexity){
-   var self = this;
+   var self = this,
        actual_power = self._calculatePower(self.options.spellpower, complexity || 0);
    self.global.score = self.global.score + actual_power;
    self.global.elem.$score.text(self.global.score);

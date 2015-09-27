@@ -1,0 +1,874 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<title>Writing jQuery/jQuery Mobile Widgets</title>
+	<meta name="description" content="A presentation on how to use the jQuery Widget factory to create widgets">
+	<meta name="author" content="Jessica Kennedy">
+	<meta name="apple-mobile-web-app-capable" content="yes" />
+	<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui">
+	<link rel="stylesheet" href="css/reveal.css">
+	<link rel="stylesheet" href="css/theme/night.css" id="theme">
+	<!-- Code syntax highlighting -->
+	<link rel="stylesheet" href="lib/css/zenburn.css">
+	<!-- Printing and PDF exports -->
+	<script>
+		var link = document.createElement( 'link' );
+		link.rel = 'stylesheet';
+		link.type = 'text/css';
+		link.href = window.location.search.match( /print-pdf/gi ) ? 'css/print/pdf.css' : 'css/print/paper.css';
+		document.getElementsByTagName( 'head' )[0].appendChild( link );
+	</script>
+	<!--[if lt IE 9]>
+	<script src="lib/js/html5shiv.js"></script>
+	<![endif]-->
+</head>
+<body>
+<div class="reveal">
+<div class="slides">
+
+<!-- Section 0: the obligatory stuff -->
+<section>
+ <h1>Writing jQuery Widgets</h1>
+ <h3>with Jessica Kennedy</h3>
+ <p>@mistersender</p>
+</section>
+
+<section>
+ <h3>Who am I?</h3>
+ <p>Lead Mobile UI Developer</p>
+ <p>I tweet @mistersender</p>
+ <p>This is my sock drawer</p>
+ <img src="lib/images/sock_drawer.jpg" width="400px">
+</section>
+
+<!-- Section 1: what is a widget -->
+<section>
+ <h2>What is a Widget?</h2>
+ <ul>
+  <li class="fragment">A Stateful Plugin</li>
+  <li class="fragment">Framework for writing stateful javascript</li>
+ </ul>
+ <!-- <img class="fragment" src="lib/images/confused_mal.gif"> -->
+ <aside class="notes" data-markdown>
+  At it's simplest... [a stateful plugin]
+
+  The most common question I get is _"What's the difference between a plugin and a widget?"_
+  It's a plugin, with _MORE!_
+
+  Widget factory is a framework for writing stateful plugins.
+  Tries to solve the various ways statfulness can be managed.
+ </aside>
+</section>
+
+<section>
+ <h3>jQuery UI Widget Factory</h3>
+ <!-- @todo {!} make a sunburst for this -->
+ <p>Fun Fact! jQuery Mobile is built on the Widget Factory</p>
+ <h3 class="fragment">Framework Defines:</h3>
+ <ul>
+  <li class="fragment">Required Functions</li>
+  <li class="fragment">How Callbacks are handled</li>
+  <li class="fragment">How options are handled</li>
+  <li class="fragment">Naming conventions</li>
+ </ul>
+ <aside class="notes" data-markdown>
+  obviously a prototype of functions
+ </aside>
+</section>
+
+<section>
+ <h3>Widgets Require:</h3>
+ <ul>
+  <li>jQuery ~82kb</li>
+  <li>
+    jQuery UI <b>-or-</b> jQuery Mobile
+    <br>
+    build with Widget Factory included ~24kb
+  </li>
+ </ul>
+</section>
+
+<section>
+ <h3>You might want a widget if...</h3>
+ <ul>
+  <li class="fragment">You find yourself writing workarouds for a plugin</li>
+  <li class="fragment">You know your application will need to maintain state</li>
+  <li class="fragment">You want to add something with the word "mobile" to your resume</li>
+ </ul>
+ <img class="fragment" src="lib/images/pun_husky.jpg" width="250" height="251">
+	<aside class="notes">
+		[question] can anybody think of a use case for a widget?
+		ie validate plugin USA/CAN
+	</aside>
+</section>
+
+<!-- section 2, the actual framework -->
+<section>
+ <h1>Widget Factory Framework</h1>
+ <p>Where we make a Harry-Potter themed widget.</p>
+</section>
+
+<section>
+ <h3>Boilerplate</h3>
+ <p>Use a blank boilerplate widget to get started.</p>
+ <a href="../01_boilerplate/" target="_blank">Check it out!</a>
+ <aside class="notes" data-markdown>
+  ```
+  $("[data-boilerplate]").boilerplate();
+  ```
+ </aside>
+</section>
+
+<section>
+ <h3>Namespacing</h3>
+
+ <p>Widgets must contain a namespace as well as their name.</p>
+ <pre><code>
+  // where {} is the widget prototype
+  $.widget("namespace.boilerplate", {});
+ </code></pre>
+	<aside class="notes">
+		what does the factory do with the namespace?
+	</aside>
+</section>
+
+<section>
+ <h3>Namespacing</h3>
+ <p>The namespace is used to add data to the element for maintaining state.</p>
+ <img src="lib/images/data-boilerplate.png">
+
+ <p>Externally, the namespace is abstracted.</p>
+ <pre><code>
+  // instantiate boilerplate widget (see, no namespace!)
+  $("#boilerplate").boilerplate();
+ </code></pre>
+
+ <aside class="notes" data-markdown>
+  can only be 1 level deep.
+
+  see the data from the last example
+  ```
+  $("[data-boilerplate]").data();
+  ```
+ </aside>
+</section>
+
+<section>
+ <h2>Give it a name!</h2>
+ <h3 class="fragment">mf.spell()</mf>
+ <aside class="notes">
+  Our widget needs a name.
+  Our widget is going to cast a spell,
+  so let's call it `spell()`
+ </aside>
+</section>
+
+<section>
+ <pre><code>
+  ;(function($, undefined){
+   $.widget("mf.spell", {
+   });
+  })(jQuery);
+ </code></pre>
+
+ <p class="fragment">That's nice...<br> But it doesn't do anything!</p>
+ <aside class="notes">
+  closure
+
+  But at this point, it doesn't do anything.
+ </aside>
+</section>
+
+<section>
+ <h3>What should it do?</h3>
+ <ul>
+  <li class="fragment">Cast a spell</li>
+  <li class="fragment">Make the spell have a variable power</li>
+ </ul>
+</section>
+
+<section>
+ <h3>Options</h3>
+ <pre><code>
+  $.widget("mf.spell", {
+   // define out options for the widget, which are handled by the factory.
+   options: {
+    spellname: "",
+    spellpower: 1
+   }
+  });
+ </code></pre>
+ <aside class="notes" data-markdown>
+  widget factory expects options to be used.
+  * should always define `options` in the prototype
+  * defaults should be set here
+
+		how do we override them?
+ </aside>
+</section>
+
+<section>
+ <h3>Overriding options</h3>
+ <pre><code>
+  $("#spellCaster2").spell({
+   spellname: "Levicorpus",
+   spellpower: 2
+  });
+ </code></pre>
+ <aside class="notes" data-markdown>
+  Factory handles setting overrides initially
+  [leadin]
+		we have options, but what do we do with them?
+ </aside>
+</section>
+</section>
+
+<section>
+ <h3>_create()</h3>
+ <pre><code>
+ $.widget("mf.spell", {
+  // define out options for the widget, which are handled by the factory.
+  options: {
+   spellname: "",
+   spellpower: 1
+  },
+
+  // called by the widget factory to kick off creation of the widget.
+  _create: function(){
+   var self = this;
+
+   // Optional: override any option defaults with what we have in the data
+   $.extend(self.options, self.element.data());
+
+			// and more...
+  }
+ });
+ </code></pre>
+ <aside class="notes" data-markdown>
+		PRIVATE function
+  * called by widget factory on .init()
+  * should contain logic to set widget up
+  * required for widget to do anything
+  [leadin] Let's look at each piece here a little more
+ </aside>
+</section>
+
+<section>
+ <h3>self</h3>
+ <pre><code>
+  var self = this;
+ </code></pre>
+ <p>"this" is the widget prototype</p>
+ <aside class="notes" data-markdown>
+  * where `this` = the widget prototype we are creating.
+  * declare at top of all functions for sanity
+ </aside>
+</section>
+
+<section>
+ <h3>Extending from Data</h3>
+	<p>Another way to set options</p>
+ <pre><code>
+  $.extend(self.options, self.element.data());
+ </code></pre>
+
+ <p>Then, at the bottom of your widget closure:</p>
+ <pre><code>
+  // have widget run immediately on page load using `data-`
+  $(document).on("ready", function(e){
+   $("body [data-spell]").spell();
+  });
+ </code></pre>
+ <aside class="notes" data-markdown>
+		_optional_
+		* how jquery mobile works (`data-theme`) (talk more on this later)
+
+		[prize] who knows what extend does?
+		take second argument and merge into first
+ </aside>
+</section>
+<!-- end options -->
+
+<section>
+ <h3>Set global variables</h3>
+ <pre><code>
+  // set all private variables the widget will use
+  self.global = {
+   score: 0,
+   elem: {
+    $last_cast: $("<aside class='spell-container__last-cast'></aside>"),
+    $info: $("<aside class='spell-container__info'></aside>"),
+    $score: $("<aside class='spell-container__score'>0</aside>"),
+    $wand: $("<figure class='spell-container__wand'>Wand</figure>")
+   }
+  };
+ </code></pre>
+ <aside class="notes" data-markdown>
+	 I always set my global variables next.
+
+		do yourself a favor.
+  if it's global, slap it in `self.global`.
+
+  I usually cache any elements I am creating/manipulating into the local global scope as well.
+
+  [leadin] So this is great, but it hasn't actually *done* anything to the user yet.
+ </aside>
+</section>
+
+
+<section>
+ <h3>_build()</h3>
+ <p>(Not part of factory) Called in `_create()`</p>
+ <pre><code>
+   // do any additional things that need to happen to set up the widget,
+			// such as adding additional elements to the page or binding events.
+   self._build();
+ </code></pre>
+ <aside class="notes" data-markdown>
+  not a part of widget factory, just something i do.
+  can be a lot of code, easier to separate.
+
+  [prize] what's that underscore mean?
+  `_` forces function to be private.
+
+  and since you're here to learn from me, you get to know what i would do! luckyyyy
+ </aside>
+</section>
+
+<section>
+ <pre><code>
+  _build: function(){
+   var self = this;
+
+   // set up the info on the spell we are casting
+   self.global.elem.$info.html("<b class='spell-container__name'>" + self.options.spellname + "</b> " + "<span class='spell-container__power'>" + self.options.spellpower + "</span>");
+
+   // Add a class to our container
+   self.element
+    .addClass("spell-container spell-container--" + self.options.spellname.replace(" ", "-", "all").toLowerCase())
+    // now let's add our globally cached elements to the widget.
+    .append(self.global.elem.$info, self.global.elem.$last_cast, self.global.elem.$score, self.global.elem.$wand);
+  }
+ </code></pre>
+	<aside class="notes" data-markdown>
+		* adding some html to display to the user
+		* adding classes for developers to target for ui interactions
+	</aside>
+</section>
+
+<section>
+ <h2>It's doing something!</h2>
+ <a href="../02_create/" target="_blank">Check it out!</a>
+ <aside class="notes">
+  That's great! But it's not doing much.
+
+  It still doesn't cast a spell.
+ </aside>
+</section>
+<!-- end create -->
+<!-- methods -->
+<section>
+ <h3>Custom Methods</h3>
+ <pre><code>
+  // actually cast the spell based on the currently set options & the complexity of the spell
+  cast: function(complexity){
+   var self = this,
+       actual_power = self._calculatePower(self.options.spellpower, complexity || 0);
+   self.global.score = self.global.score + actual_power;
+   self.global.elem.$score.text(self.global.score);
+   self.global.elem.$last_cast.html("<b>" + self.options.spellname + "</b> @ " + actual_power);
+  }
+ </code></pre>
+ <aside class="notes" data-markdown>
+		*public* function
+
+		accepts argument
+
+  creates a method called "cast" that any developer can call on your widget.
+
+  Let's not worry about _calculate_power. it's a private function that returns a number
+  based on the base power of the spell and the entered complexity.
+
+  So how do we call this?
+ </aside>
+</section>
+
+<section>
+ <h3>Calling methods</h3>
+ <pre><code>
+ $("button").on("click", function(e){
+
+  // call in to this instance of spell
+  $("#spellCaster1").spell("cast", 42);
+ });
+ </code></pre>
+
+ <a href="../03_methods/" target="_blank">Check it out!</a>
+
+ <aside class="notes">
+  each additional argument is a comma delimited list or a hash
+
+  Keep in mind, `_` functions are not callable. won't work:
+  `$("#spellCaster1").spell("_calculate_power", 42, 10);`
+
+  at this point, our widget works
+
+  [leadin] but there's no real skill involved...
+ </aside>
+</section>
+
+<section>
+	<h3>But `power` is random... Let's calculate it!</h3>
+</section>
+
+<section>
+ <h3>We need Events!</h3>
+ <p>When the wand is pressed, calculate time till it's released.</p>
+</section>
+
+<section>
+ <pre><code>
+ _add_events: function(){
+  var self = this,
+      power_interval,
+      power = 0;
+  self.element
+   .on("mousedown.spell", ".spell-container__wand", function(e){
+    self.element.addClass("is-casting");
+    power_interval = setInterval(function(){
+     power++
+    }, 20);
+   })
+   .on("mouseup.spell mouseout.spell", ".spell-container__wand", function(e){
+    if(power){
+     clearInterval(power_interval);
+     self.element.removeClass("is-casting");
+     self.cast(power);
+     power = 0; // reset power to 0 every time
+    }
+   });
+ }
+ </code></pre>
+ <aside class="notes" data-markdown>
+  a lot of stuff is happening here.
+  * variables are set
+  * self.element used
+  * events added
+  * math happening
+  * calling cast
+
+		[leadin] let's delve in to each section here
+ </aside>
+</section>
+
+<section>
+ <h3>self.element</h3>
+ <pre><code>
+  var self = this;
+
+  self.element
+ </code></pre>
+ <p>Contains the element the widget is attached to</p>
+</section>
+
+<section>
+ <h3 class="fragment">Namespacing events</h3>
+ <pre><code>
+ .on("mouseup.spell mouseout.spell", ".spell-container__wand", function(e){
+ </code></pre>
+
+ <p class="fragment">namespace goes <b>after</b> the event.</p>
+ <p class="fragment">namespace should be the same as your widget's name</p>
+ <aside class="notes">
+		[prize] who can tell me what's hapening here?
+
+  * namespaces go after the event
+  * same as widget's name
+  jQuery stores namespaced events together internally to make them easier to locate and manipulate.
+  [leadin]Soon enough, we will get to why this is important.
+ </aside>
+</section>
+
+<section>
+ <h2>Now we're getting somewhere!</h2>
+ <a href="../04_events/" target="_blank">Check it out!</a>
+ <p class="fragment">But users want to cast more than 1 lame spell</p>
+ <aside class="notes">
+  [frag] But I want to cast more than 1 lame spell
+ </aside>
+</section>
+
+<section>
+ <h3>Reacting to Change</h3>
+ <select name="name">
+  <option value="Expelliarmus">Expelliarmus</option>
+  <option value="Stupefy" selected>Stupefy</option>
+  <option value="Levicorpus">Levicorpus</option>
+  <option value="Avada Kedavera">Avada Kedavera</option>
+ </select>
+ <input type="number" name="power" value="5">
+ <pre><code>
+  $("#wrapper")
+
+   // if a user changes spells, update the widget
+   .on("change", "select[name=name]", function(e){
+    $("#spellCaster1").spell("option", "spellname", this.value);
+   })
+
+   // if a users changes the power of the spell, update the widget
+   .on("change", "input[name=power]", function(e){
+    $("#spellCaster1").spell("option", "spellpower", this.value);
+   });
+ </code></pre>
+ <aside class="notes">
+  so you want to cast a different spell. How?
+  Let's say you have a select, you can update it by calling "option"
+  (a widget factory default)
+
+  [leadin]That updates the widget, but you can't see that anything has changed
+ </aside>
+</section>
+
+<section>
+ <h3>_setOption</h3>
+ <p>`_setOption` is called for each `option` passed in</p>
+ <pre><code>
+  // update options
+  $("#spellCaster1").spell("option", {
+   spellname: "Sectumsempra",
+   spellpower: 80
+  });
+ </pre></code>
+ In the widget:
+ <pre><code>
+  // handle setting each option if any additional work is needed.
+  _setOption: function(key, value){
+   ..
+  }
+ </code></pre>
+ <aside class="notes">
+		private function
+
+  so, if you pass in 2 options to set,
+  (and you can as an object),
+  the factory will call your `setOption` 2 times.
+ </aside>
+</section>
+
+<section>
+ <h3>_setOption</h3>
+ <p>Inside set option, 3 things should typically happen:</p>
+ <ol>
+  <li>Set the option in prototype</li>
+  <li>Do any "other work" to update the option</li>
+  <li>Trigger a `setoption` event</li>
+ </ol>
+</section>
+
+<section>
+ <h3>1. setOption in prototype</h3>
+ <p>Don't set the option yourself, let the widget factory do this!</p>
+ <pre><code>
+  $.Widget.prototype._setOption.apply(self, arguments);
+ </code></pre>
+</section>
+<section>
+ <h3>2. Do "other work"</h3>
+ <p>Are there visual elements that need to be updated if the option changes? Other internal functions?</p>
+ <pre><code>
+  // (inside _setOption function)
+  if(key == "spellname"){
+   // update the info for the spell
+   self._build_info();
+
+   // change out the class on the main element
+   self.element
+    .removeClass("spell-container--" + old_value.replace(" ", "-", "all"))
+    .addClass("spell-container--" + value.replace(" ", "-", "all"));
+  }
+ </code></pre>
+ <aside class="notes">
+  this is for anything that simply setting the option can't accomplish.
+ </aside>
+</section>
+
+<section>
+ <h3>3. Trigger a `setOption` event</h3>
+ <pre><code>
+ self._trigger("setOption", null, {
+  option: key,
+  original: old_value,
+  current: value
+ });
+ </code></pre>
+ <aside class="notes" data-markdown>
+  this is not required
+
+  [prize] who sees anything different here?
+
+  [prize] any guesses as to what that bad boy does?
+
+  Now, you may notice we aren't using `trigger`, but `_trigger` (underscore).
+  There is a small but important difference here, and it has to do with how
+  the widget factory handles callbacks. We will get to that in one second.
+ </aside>
+</section>
+
+<section>
+ <h2>Our widget changes spells!</h2>
+ <a href="../05_options/" target="_blank">Check it out!</a>
+ <p class="fragment">Now back to that whole _trigger() business</p>
+ <aside class="notes">
+  [frag] now back to that whole trigger business.
+ </aside>
+</section>
+
+<section>
+ <h2>Callbacks</h2>
+ <p>What does `_trigger()` do?</p>
+ <p class="fragment">Fires an event</p>
+ <p class="fragment">Fires a callback</p>
+ <aside class="notes">
+  [prize] So, what does regular `trigger` do?
+  And callbacks we typically would pass in to an init, right?
+ </aside>
+</section>
+
+<section>
+ <h3>So, what does that look like?</h3>
+ <pre><code>
+  self._trigger("aftercast", null, { actual_power: actual_power });
+ </code></pre>
+ <aside class="notes" data-markdown>
+  let's say we want to have an alert appear to let the user
+  know their spell was cast, or an option changed.
+
+  * aftercast - the name of the custom event/callback
+  * null - a jQuery event object that initiated the callback
+  * {} - any data to pass through to the event/callback
+ </aside>
+</section>
+
+<section>
+ <h3>Fire a callback</h3>
+ <p>Or pass a callback in to the widget's init.</p>
+ <pre><code>
+  $("#spellCaster2").spell({
+    // pass a callback directly in to the initialized widget
+    aftercast: function(event, data){
+      // show user the last thing cast
+      show_last_cast.apply(this);
+    }
+  });
+ </code></pre>
+ <aside class="notes">
+  Both will be called, it's up to you which to use.
+ </aside>
+</section>
+
+<section>
+ <h3>Fire an event</h3>
+ <p>Prepends the name of the widget to the custom event fired.</p>
+ <pre><code>
+  // bind an event listener to spellCaster1 to display the unforgivable curse messaging.
+  $("#spellCaster1").on("spellaftercast", function(event, data){
+   // show user the last thing cast
+   show_last_cast.apply(this);
+  });
+ </code></pre>
+ <aside class="notes" data-markdown>
+  notice `spell` has been prepended.
+
+		could use `data.actual_power` in event as well if we needed to.
+ </aside>
+</section>
+
+<section>
+ <h2>The widget is built!</h2>
+ <a href="../06_callbacks/" target="_blank">Check it out!</a>
+ <p class="fragment">But it's not done yet...</p>
+</section>
+
+<section>
+ <h3>What if I don't want it anymore?</h3>
+ <p class="fragment">You need to `destroy` it!</p>
+ <aside class="notes">
+  [frag] you need to destroy it!
+ </aside>
+</section>
+
+<section>
+ <h3>The Destroy Method</h3>
+ <p>What it should do:</p>
+ <ul>
+  <li class="fragment">Remove events</li>
+  <li class="fragment">Undo element manipulation</li>
+  <li class="fragment">Remove generated elements</li>
+  <li class="fragment">Call prototype destroy</li>
+ </ul>
+ <aside class="notes">
+  basically... [next slide] it should destroy all the things
+ </aside>
+</section>
+
+<section>
+ <img src="lib/images/destroy_ATT.jpg">
+</section>
+
+<section>
+ <h3>Destroy</h3>
+ <pre><code>
+  destroy: function(){
+   var self = this;
+
+   // at the very least, remove all namespaced events on the element
+   self.element.off(".spell");
+
+   // remove the classes from the element
+   self.element.removeClass("spell-container spell-container--" + self.options.spellname.replace(" ", "-", "all").toLowerCase());
+
+   // remove our global elements too
+   self.global.elem.$info.remove();
+
+   // Last, destroy the widget.
+   $.Widget.prototype.destroy.call(self);
+  }
+ </code></pre>
+</section>
+
+<section>
+ <h3>Remove Events</h3>
+ <p>You namespaced your events, right??</p>
+ <pre><code>
+  self.element.off(".spell");
+ </pre></code>
+ <aside class="notes">
+  If you namespaced your events like you should have,
+  removing all events is a snap!
+ </aside>
+</section>
+
+<section>
+ <h3>Undo Element Manipulation</h3>
+ <p>Take those classes/data/etc back out.</p>
+ <pre><code>
+  // remove the classes from the element
+  self.element.removeClass("spell-container spell-container--" + self.options.spellname.replace(" ", "-", "all").toLowerCase());
+ </code></pre>
+</section>
+
+<section>
+ <h3>Remove generated elements</h3>
+ <p>Anything added to the DOM has to go</p>
+ <pre><code>
+  // remove our global elements too
+  self.global.elem.$info.remove();
+  self.global.elem.$last_cast.remove();
+  self.global.elem.$score.remove();
+  self.global.elem.$wand.remove();
+ </code></pre>
+</section>
+
+<section>
+ <h3>Call Prototype Destroy</h3>
+ <p>Let the widget factory take care of itself.</p>
+ <pre><code>
+ // Last, destroy the widget.
+ $.Widget.prototype.destroy.call(self);
+ </code></pre>
+ <aside class="notes">
+  remember that data it adds to the element, etc? this'll remove that mess.
+ </aside>
+</section>
+
+<section>
+ <h2>Widget Complete!</h2>
+ <p>If a users casts <b>Avada Kedavera</b>, the widget is destroyed.</p>
+ <a href="../07_destroy/" target="_blank">Check it out!</a>
+ <aside class="notes">
+  I added a function to destroy this widget if the user tried avada kedavera. let's watch it!
+ </aside>
+</section>
+
+<section>
+ <h2>jQuery Mobile</h2>
+ <p>So it needs to work on jquery mobile?</p>
+ <aside class="notes">
+  well, that's pretty easy, luckily!
+ </aside>
+</section>
+
+<section>
+ <h3>Replace This...</h3>
+ <pre><code>
+  $(document).on("ready", function(e){
+   $("body [data-spell]").spell();
+  });
+ </code></pre>
+</section>
+
+<section>
+ <h3>With This!</h3>
+ <pre><code>
+  $(document).on("pageinit", function(e){
+   var $target = $(e.target); // the page being created
+   $target.find(":jqmData(spell)").spell();
+   $target.is(":jqmData(spell)") && $target.spell();
+  });
+ </code></pre>
+ <aside class="notes">
+  find all instances of data-spell
+  does the thing itself have data-spell on it?
+ </aside>
+</section>
+
+<section>
+ <h2>jQuery Mobile Widgetized!</h2>
+ <a href="../08_mobile/" target="_blank">Check it out!</a>
+ <aside class="notes">
+  Let's not dwell on the ugliness we're about to see.
+
+  Click through both pages
+ </aside>
+</section>
+
+<section>
+ <h1>Questions?</h1>
+</section>
+
+<section>
+ <p>We're hiring UI Developers!</p>
+ <p>Follow the team: @mamobiledevs</p>
+</section>
+</div><!-- end slides div -->
+</div><!-- end reveal div -->
+
+<script src="lib/js/head.min.js"></script>
+<script src="js/reveal.js"></script>
+<script>
+	// Full list of configuration options available at:
+	// https://github.com/hakimel/reveal.js#configuration
+	Reveal.initialize({
+		controls: false,
+		progress: true,
+		history: true,
+		center: true,
+
+		transition: 'slide', // none/fade/slide/convex/concave/zoom
+
+		// Optional reveal.js plugins
+		dependencies: [
+			{ src: 'lib/js/classList.js', condition: function() { return !document.body.classList; } },
+			{ src: 'plugin/markdown/marked.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+			{ src: 'plugin/markdown/markdown.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+			{ src: 'plugin/highlight/highlight.js', async: true, condition: function() { return !!document.querySelector( 'pre code' ); }, callback: function() { hljs.initHighlightingOnLoad(); } },
+			{ src: 'plugin/zoom-js/zoom.js', async: true },
+			{ src: 'plugin/notes/notes.js', async: true }
+		]
+	});
+</script>
+
+</body>
+</html>

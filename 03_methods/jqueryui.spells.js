@@ -1,5 +1,3 @@
-//http://test.site/widgets/spells/02_create/
-
 // @author Jessica Kennedy
 // @name Spell Caster Widget
 ;(function($, undefined){
@@ -20,7 +18,7 @@
    self.global = { // contain any global private variables
     score: 0,
     elem: {
-     $last_cast: $("<aside class='spell-container__last_cast'>"),
+     $last_cast: $("<aside class='spell-container__last-cast'>"),
      $info: $("<aside class='spell-container__info'>"),
      $score: $("<aside class='spell-container__score'>0</aside>"),
      $wand: $("<figure class='spell-container__wand'>Wand</figure>")
@@ -35,18 +33,18 @@
   _build: function(){
    var self = this;
    // set up the info on the spell we are casting
-   self.global.elem.$info.html("<b class='spell_container__name'>" + self.options.spellname + "</b> " + "<span class='spell_container__power'>" + self.options.spellpower + "</span>");
+   self.global.elem.$info.html("<b class='spell-container__name'>" + self.options.spellname + "</b> " + "<span class='spell-container__power'>" + self.options.spellpower + "</span>");
 
    // Add a class to our container
    self.element
-    .addClass("spell-container spell-container--" + self.options.spellname.replace(" ", "-", "all"))
+    .addClass("spell-container spell-container--" + self.options.spellname.replace(" ", "-", "all").toLowerCase())
     // now let's add our globally cached elements to the widget.
     .append(self.global.elem.$info, self.global.elem.$last_cast, self.global.elem.$score, self.global.elem.$wand);
   },
 
   // actually cast the spell based on the currently set options & the complexity of the spell
   cast: function(complexity){
-   var self = this;
+   var self = this,
        actual_power = self._calculatePower(self.options.spellpower, complexity || 0);
    self.global.score = self.global.score + actual_power;
    self.global.elem.$score.text(self.global.score);
@@ -56,7 +54,7 @@
   // util to figure out how powerful a spell is based on complexity & base power
   _calculatePower: function(base_power, complexity){ // returns power of a move
    var self = this;
-   return Math.round(base_power * (complexity / 100));
+   return Math.round(base_power * (complexity / 20));
   },
 
   // _setOption is a required private function for widgets. It should handle setting each option if any additional work is needed.

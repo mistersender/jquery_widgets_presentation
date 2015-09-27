@@ -1,5 +1,3 @@
-//http://test.site/widgets/spells/02_create/
-
 // @author Jessica Kennedy
 // @name Spell Caster Widget
 ;(function($, undefined){
@@ -20,7 +18,7 @@
    self.global = { // contain any global private variables
     score: 0,
     elem: {
-     $last_cast: $("<aside class='spell-container__last_cast'>"),
+     $last_cast: $("<aside class='spell-container__last-cast'>"),
      $info: $("<aside class='spell-container__info'>"),
      $score: $("<aside class='spell-container__score'>0</aside>"),
      $wand: $("<figure class='spell-container__wand'>Wand</figure>")
@@ -35,11 +33,11 @@
   _build: function(){
    var self = this;
    // set up the info on the spell we are casting
-   self.global.elem.$info.html("<b class='spell_container__name'>" + self.options.spellname + "</b> " + "<span class='spell_container__power'>" + self.options.spellpower + "</span>");
+   self.global.elem.$info.html("<b class='spell-container__name'>" + self.options.spellname + "</b> " + "<span class='spell-container__power'>" + self.options.spellpower + "</span>");
 
    // Add a class to our container
    self.element
-    .addClass("spell-container spell-container--" + self.options.spellname.replace(" ", "-", "all"))
+    .addClass("spell-container spell-container--" + self.options.spellname.replace(" ", "-", "all").toLowerCase())
     // now let's add our globally cached elements to the widget.
     .append(self.global.elem.$info, self.global.elem.$last_cast, self.global.elem.$score, self.global.elem.$wand);
   },
@@ -80,8 +78,8 @@
  }); // end widget creation
 
  // optional: if you want the widget to always run immediately on page load using `data-`, comment this code in
- // $(document).on("ready", function(e){
- //  $("body [data-spell]").spell();
- // });
+ $(document).on("ready", function(e){
+  $("body [data-spell]").spell();
+ });
 
 })(jQuery);
