@@ -40,7 +40,7 @@
  <p>Lead Mobile UI Developer</p>
  <p>I tweet @mistersender</p>
  <p>This is my sock drawer</p>
- <img src="lib/images/sock_drawer.jpg" width="300px">
+ <img src="lib/images/sock_drawer.jpg" width="400px">
 </section>
 
 <!-- Section 1: what is a widget -->
@@ -98,16 +98,16 @@
   <li class="fragment">You want to add something with the word "mobile" to your resume</li>
  </ul>
  <img class="fragment" src="lib/images/pun_husky.jpg" width="250" height="251">
+	<aside class="notes">
+		[question] can anybody think of a use case for a widget?
+		ie validate plugin USA/CAN
+	</aside>
 </section>
 
 <!-- section 2, the actual framework -->
 <section>
  <h1>Widget Factory Framework</h1>
  <p>Where we make a Harry-Potter themed widget.</p>
- <aside class="notes" data-markdown>
-  should
-  * cast spells
- </aside>
 </section>
 
 <section>
@@ -129,6 +129,9 @@
   // where {} is the widget prototype
   $.widget("namespace.boilerplate", {});
  </code></pre>
+	<aside class="notes">
+		what does the factory do with the namespace?
+	</aside>
 </section>
 
 <section>
@@ -144,8 +147,6 @@
 
  <aside class="notes" data-markdown>
   can only be 1 level deep.
-
-  dash delimited for use in dataset
 
   see the data from the last example
   ```
@@ -174,7 +175,7 @@
 
  <p class="fragment">That's nice...<br> But it doesn't do anything!</p>
  <aside class="notes">
-  always wrap in a closure, because best practices.
+  closure
 
   But at this point, it doesn't do anything.
  </aside>
@@ -184,11 +185,8 @@
  <h3>What should it do?</h3>
  <ul>
   <li class="fragment">Cast a spell</li>
-  <li class="fragment">Make the spell have a variable strength</li>
+  <li class="fragment">Make the spell have a variable power</li>
  </ul>
- <aside class="notes">
-  But that's boring. Let's let the spells have a strength.
- </aside>
 </section>
 
 <section>
@@ -202,11 +200,12 @@
    }
   });
  </code></pre>
- <aside class="notes">
+ <aside class="notes" data-markdown>
   widget factory expects options to be used.
   * should always define `options` in the prototype
   * defaults should be set here
-  we have default options, but how do we override them?
+
+		how do we override them?
  </aside>
 </section>
 
@@ -218,9 +217,10 @@
    spellpower: 2
   });
  </code></pre>
- <aside class="notes">
+ <aside class="notes" data-markdown>
   Factory handles setting overrides initially
-  we have optoins, but what do we do with them?
+  [leadin]
+		we have options, but what do we do with them?
  </aside>
 </section>
 </section>
@@ -241,14 +241,17 @@
 
    // Optional: override any option defaults with what we have in the data
    $.extend(self.options, self.element.data());
+
+			// and more...
   }
  });
  </code></pre>
- <aside class="notes">
+ <aside class="notes" data-markdown>
+		PRIVATE function
   * called by widget factory on .init()
   * should contain logic to set widget up
   * required for widget to do anything
-  Let's look at each piece here a little more
+  [leadin] Let's look at each piece here a little more
  </aside>
 </section>
 
@@ -259,18 +262,19 @@
  </code></pre>
  <p>"this" is the widget prototype</p>
  <aside class="notes" data-markdown>
-  * where `this` = the widget code.
+  * where `this` = the widget prototype we are creating.
   * declare at top of all functions for sanity
  </aside>
 </section>
 
 <section>
- <h3>Another way to set options</h3>
+ <h3>Extending from Data</h3>
+	<p>Another way to set options</p>
  <pre><code>
   $.extend(self.options, self.element.data());
  </code></pre>
 
- <p>Then, at the bottom of your closure:</p>
+ <p>Then, at the bottom of your widget closure:</p>
  <pre><code>
   // have widget run immediately on page load using `data-`
   $(document).on("ready", function(e){
@@ -278,11 +282,11 @@
   });
  </code></pre>
  <aside class="notes" data-markdown>
-  * take second argument and merge into first
-  * how jquery mobile operates ie `data-theme`
-  * optional, but recommended for mobile widgets to stick with how jqm works
+		_optional_
+		* how jquery mobile works (`data-theme`) (talk more on this later)
 
-  * then, on *ready* OR *pageinit* call the widget
+		[prize] who knows what extend does?
+		take second argument and merge into first
  </aside>
 </section>
 <!-- end options -->
@@ -290,34 +294,26 @@
 <section>
  <h3>Set global variables</h3>
  <pre><code>
-  _create: function(){
-   var self = this;
-
-   $.extend(self.options, self.element.data());
-
-   // set all private variables the widget will use
-   self.global = {
-    score: 0,
-    elem: {
-     $last_cast: $("<aside class='spell-container__last-cast'></aside>"),
-     $info: $("<aside class='spell-container__info'></aside>"),
-     $score: $("<aside class='spell-container__score'>0</aside>"),
-     $wand: $("<figure class='spell-container__wand'>Wand</figure>")
-    }
-   };
-  }
+  // set all private variables the widget will use
+  self.global = {
+   score: 0,
+   elem: {
+    $last_cast: $("<aside class='spell-container__last-cast'></aside>"),
+    $info: $("<aside class='spell-container__info'></aside>"),
+    $score: $("<aside class='spell-container__score'>0</aside>"),
+    $wand: $("<figure class='spell-container__wand'>Wand</figure>")
+   }
+  };
  </code></pre>
  <aside class="notes" data-markdown>
-  do yourself a favor.
-  if it's global, slap it in `self.global`.
+	 I always set my global variables next.
 
-  I always set my global variables next.
+		do yourself a favor.
+  if it's global, slap it in `self.global`.
 
   I usually cache any elements I am creating/manipulating into the local global scope as well.
 
-  Note: reveal freaked out, you don't need the closing `aside` tags irl.
-
-  So this is great, but it hasn't actually *done* anything to the user yet.
+  [leadin] So this is great, but it hasn't actually *done* anything to the user yet.
  </aside>
 </section>
 
@@ -326,21 +322,15 @@
  <h3>_build()</h3>
  <p>(Not part of factory) Called in `_create()`</p>
  <pre><code>
-  _create: function(){
-   var self = this;
-
-   $.extend(self.options, self.element.data());
-
-   self.global = { .. };
-
-   // do any additional things that need to happen to set up the widget, such as adding additional elements to the page or binding events.
+   // do any additional things that need to happen to set up the widget,
+			// such as adding additional elements to the page or binding events.
    self._build();
-  },
  </code></pre>
- <aside class="notes">
+ <aside class="notes" data-markdown>
   not a part of widget factory, just something i do.
   can be a lot of code, easier to separate.
 
+  [prize] what's that underscore mean?
   `_` forces function to be private.
 
   and since you're here to learn from me, you get to know what i would do! luckyyyy
@@ -362,6 +352,10 @@
     .append(self.global.elem.$info, self.global.elem.$last_cast, self.global.elem.$score, self.global.elem.$wand);
   }
  </code></pre>
+	<aside class="notes" data-markdown>
+		* adding some html to display to the user
+		* adding classes for developers to target for ui interactions
+	</aside>
 </section>
 
 <section>
@@ -387,7 +381,11 @@
    self.global.elem.$last_cast.html("<b>" + self.options.spellname + "</b> @ " + actual_power);
   }
  </code></pre>
- <aside class="notes">
+ <aside class="notes" data-markdown>
+		*public* function
+
+		accepts argument
+
   creates a method called "cast" that any developer can call on your widget.
 
   Let's not worry about _calculate_power. it's a private function that returns a number
@@ -403,7 +401,7 @@
  $("button").on("click", function(e){
 
   // call in to this instance of spell
-  $("#spellCaster1").spell("cast", 78);
+  $("#spellCaster1").spell("cast", 42);
  });
  </code></pre>
 
@@ -413,11 +411,16 @@
   each additional argument is a comma delimited list or a hash
 
   Keep in mind, `_` functions are not callable. won't work:
-  `$("#spellCaster1").spell("_calculate_power", 78, 10);`
+  `$("#spellCaster1").spell("_calculate_power", 42, 10);`
 
   at this point, our widget works
-  but power is random, so let's calculate it
+
+  [leadin] but there's no real skill involved...
  </aside>
+</section>
+
+<section>
+	<h3>But `power` is random... Let's calculate it!</h3>
 </section>
 
 <section>
@@ -455,6 +458,8 @@
   * events added
   * math happening
   * calling cast
+
+		[leadin] let's delve in to each section here
  </aside>
 </section>
 
@@ -469,17 +474,20 @@
 </section>
 
 <section>
- <h3>Namespacing events</h3>
+ <h3 class="fragment">Namespacing events</h3>
  <pre><code>
  .on("mouseup.spell mouseout.spell", ".spell-container__wand", function(e){
  </code></pre>
+
  <p class="fragment">namespace goes <b>after</b> the event.</p>
  <p class="fragment">namespace should be the same as your widget's name</p>
  <aside class="notes">
+		[prize] who can tell me what's hapening here?
+
   * namespaces go after the event
   * same as widget's name
   jQuery stores namespaced events together internally to make them easier to locate and manipulate.
-  Soon enough, we will get to why this is important.
+  [leadin]Soon enough, we will get to why this is important.
  </aside>
 </section>
 
@@ -519,7 +527,7 @@
   Let's say you have a select, you can update it by calling "option"
   (a widget factory default)
 
-  That updates the widget, but you can't see that anything has changed
+  [leadin]That updates the widget, but you can't see that anything has changed
  </aside>
 </section>
 
@@ -541,6 +549,8 @@
   }
  </code></pre>
  <aside class="notes">
+		private function
+
   so, if you pass in 2 options to set,
   (and you can as an object),
   the factory will call your `setOption` 2 times.
@@ -593,14 +603,13 @@
   current: value
  });
  </code></pre>
- <aside class="notes">
-  this is not required, but I add it in here on setOption, you never know
-  when it will be needed.
-
-  pass the original, current, and key so the developer can do any manipulations they need.
+ <aside class="notes" data-markdown>
+  this is not required
 
   [prize] who sees anything different here?
+
   [prize] any guesses as to what that bad boy does?
+
   Now, you may notice we aren't using `trigger`, but `_trigger` (underscore).
   There is a small but important difference here, and it has to do with how
   the widget factory handles callbacks. We will get to that in one second.
@@ -643,22 +652,6 @@
 </section>
 
 <section>
- <h3>Fire an event</h3>
- <p>Prepends the name of the widget to the custom event fired.</p>
- <pre><code>
-  // bind an event listener to spellCaster1 to display the unforgivable curse messaging.
-  $("#spellCaster1").on("spellaftercast", function(event, data){
-   // show user the last thing cast
-   show_last_cast.apply(this);
-  });
- </code></pre>
- <aside class="notes">
-  notice `spell` has been prepended.
-  we can see the name of the spell and use that to display messaging.
-  could use `data.actual_power` in event as well if we needed to.
- </aside>
-</section>
-<section>
  <h3>Fire a callback</h3>
  <p>Or pass a callback in to the widget's init.</p>
  <pre><code>
@@ -672,6 +665,23 @@
  </code></pre>
  <aside class="notes">
   Both will be called, it's up to you which to use.
+ </aside>
+</section>
+
+<section>
+ <h3>Fire an event</h3>
+ <p>Prepends the name of the widget to the custom event fired.</p>
+ <pre><code>
+  // bind an event listener to spellCaster1 to display the unforgivable curse messaging.
+  $("#spellCaster1").on("spellaftercast", function(event, data){
+   // show user the last thing cast
+   show_last_cast.apply(this);
+  });
+ </code></pre>
+ <aside class="notes" data-markdown>
+  notice `spell` has been prepended.
+
+		could use `data.actual_power` in event as well if we needed to.
  </aside>
 </section>
 
@@ -841,7 +851,7 @@
 	// Full list of configuration options available at:
 	// https://github.com/hakimel/reveal.js#configuration
 	Reveal.initialize({
-		controls: true,
+		controls: false,
 		progress: true,
 		history: true,
 		center: true,
