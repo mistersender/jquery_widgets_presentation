@@ -278,12 +278,12 @@
  <pre><code>
   // have widget run immediately on page load using `data-`
   $(document).on("ready", function(e){
-   $("body [data-spell]").spell();
+   $("[data-spell]").spell();
   });
  </code></pre>
  <aside class="notes" data-markdown>
 		_optional_
-		* how jquery mobile works (`data-theme`) (talk more on this later)
+		* how jQuery Mobile works (`data-theme`) (talk more on this later)
 
 		[prize] who knows what extend does?
 		take second argument and merge into first
@@ -319,12 +319,11 @@
 
 
 <section>
- <h3>_build()</h3>
+ <h3>_build( )</h3>
  <p>(Not part of factory) Called in `_create()`</p>
  <pre><code>
-   // do any additional things that need to happen to set up the widget,
-			// such as adding additional elements to the page or binding events.
-   self._build();
+  // do any additional things that need to happen to set up the widget
+  self._build();
  </code></pre>
  <aside class="notes" data-markdown>
   not a part of widget factory, just something i do.
@@ -652,23 +651,6 @@
 </section>
 
 <section>
- <h3>Fire a callback</h3>
- <p>Or pass a callback in to the widget's init.</p>
- <pre><code>
-  $("#spellCaster2").spell({
-    // pass a callback directly in to the initialized widget
-    aftercast: function(event, data){
-      // show user the last thing cast
-      show_last_cast.apply(this);
-    }
-  });
- </code></pre>
- <aside class="notes">
-  Both will be called, it's up to you which to use.
- </aside>
-</section>
-
-<section>
  <h3>Fire an event</h3>
  <p>Prepends the name of the widget to the custom event fired.</p>
  <pre><code>
@@ -686,14 +668,31 @@
 </section>
 
 <section>
+ <h3>Fire a callback</h3>
+ <p>Or pass a callback in to the widget's init.</p>
+ <pre><code>
+  $("#spellCaster2").spell({
+    // pass a callback directly in to the initialized widget
+    aftercast: function(event, data){
+      // show user the last thing cast
+      show_last_cast.apply(this);
+    }
+  });
+ </code></pre>
+ <aside class="notes">
+  Both will be called, it's up to you which to use.
+ </aside>
+</section>
+
+<section>
  <h2>The widget is built!</h2>
  <a href="../06_callbacks/" target="_blank">Check it out!</a>
  <p class="fragment">But it's not done yet...</p>
 </section>
 
 <section>
- <h3>What if I don't want it anymore?</h3>
- <p class="fragment">You need to `destroy` it!</p>
+	<h3>What if you want to remove the widget?</h3>
+ <p class="fragment">You need to <code>destroy</code> it!</p>
  <aside class="notes">
   [frag] you need to destroy it!
  </aside>
@@ -702,12 +701,10 @@
 <section>
  <h3>The Destroy Method</h3>
  <p>What it should do:</p>
- <ul>
-  <li class="fragment">Remove events</li>
-  <li class="fragment">Undo element manipulation</li>
-  <li class="fragment">Remove generated elements</li>
-  <li class="fragment">Call prototype destroy</li>
- </ul>
+ <p class="fragment">Remove events</p>
+ <p class="fragment">Undo element manipulation</p>
+ <p class="fragment">Remove generated elements</p>
+ <p class="fragment">Call prototype destroy</p>
  <aside class="notes">
   basically... [next slide] it should destroy all the things
  </aside>
@@ -794,7 +791,7 @@
 
 <section>
  <h2>jQuery Mobile</h2>
- <p>So it needs to work on jquery mobile?</p>
+ <p>So it needs to work on jQuery Mobile?</p>
  <aside class="notes">
   well, that's pretty easy, luckily!
  </aside>
@@ -804,7 +801,7 @@
  <h3>Replace This...</h3>
  <pre><code>
   $(document).on("ready", function(e){
-   $("body [data-spell]").spell();
+   $("[data-spell]").spell();
   });
  </code></pre>
 </section>
@@ -826,6 +823,7 @@
 
 <section>
  <h2>jQuery Mobile Widgetized!</h2>
+	<img src="lib/images/lucille.gif"><br>
  <a href="../08_mobile/" target="_blank">Check it out!</a>
  <aside class="notes">
   Let's not dwell on the ugliness we're about to see.
@@ -835,13 +833,23 @@
 </section>
 
 <section>
- <h1>Questions?</h1>
+ <h3>We're hiring Developers!</h3>
+	<ul>
+		<li>Coldfusion</li>
+		<li>Mobile Developers (iOS, Android, Hybrid)</li>
+		<li>UI/UX Designers &amp; Developers</li>
+		<li>Project Managers</li>
+	</ul>
+ <p>hrrecruiter@marketamerica.com</p>
 </section>
 
 <section>
- <p>We're hiring UI Developers!</p>
- <p>Follow the team: @mamobiledevs</p>
+ <h1>Questions?</h1>
+	<p>Me: @mistersender</p>
+	<p>Me: github.com/mistersender</p>
+	<p>The Team: @mamobiledevs</p>
 </section>
+
 </div><!-- end slides div -->
 </div><!-- end reveal div -->
 
