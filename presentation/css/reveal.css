@@ -1173,3 +1173,12 @@ body {
 
 .zoomed .reveal .roll span:after {
   visibility: hidden; }
+
+
+.reveal code{
+ background: rgba(226, 226, 226, 0.25);
+ padding: .15em .35em;
+ border-radius: .25em;
+ line-height: 1em;
+ font-family: "Source Code Pro";
+}
